@@ -1,1 +1,3 @@
 # r2ai-competition-aihoi
+
+>This repository houses the development and deployment framework for an advanced MLOps-driven AI Agent system, built specifically by team `**AI hỏi**` for the `**ROAD TO AI**` competition. Designed with scalability and production-readiness in mind, the project integrates a robust Retrieval-Augmented Generation (RAG) pipeline with complex multi-agent workflows. The entire repository is architected to transition seamlessly from a local development environment to a cloud-native infrastructure, incorporating robust CI/CD pipelines, containerization, and comprehensive MLOps monitoring to ensure reliable performance throughout the competition and beyond.
