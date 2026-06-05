@@ -1,0 +1,79 @@
+# ========================================================
+# NEO4J Architecture: Graph-based RAG for Vietnamese law
+# ========================================================
+
+neo4j_schema:
+  nodes:
+    - label:
+      constraints:
+        unique: ["doc_id"]
+      indexes:
+        text: ["title"]
+        
+    - label: "Chapter"  # Chương
+      constraints:
+        unique: ["chapter_id"]
+        
+    - label: "Article"  # Điều
+      constraints:
+        unique: ["article_id"]
+      indexes:
+        text: ["number", "status"]
+        
+    - label: "Chunk"
+      constraints:
+        unique: ["chunk_id"]
+      indexes:
+        vector:
+          property: "embedding"
+          dimension: [768, 1536]
+          metric: "cosine"
+
+  relationships:
+    # ===================================
+    # Quan hệ phân cấp hành chính
+    # ===================================
+    - type: "HAS_CHAPTER"
+      source_label: "Document"
+      target_label: "Chapter"
+      
+    - type: "HAS_ARTICLE"
+      source_label: "Chapter"
+      target_label: "Article"
+    
+    - type: "HAS_ARTICLE"
+      source_label: "Document"
+      target_label: "Article"
+      
+    - type: "HAS_CHUNK"
+      source_label: "Article"
+      target_label: "Chunk"
+
+    # ===================================
+    # Quan hệ pháp lý chuyên sâu
+    # ===================================
+    - type: "CITES"
+      source_label: "Chunk"
+      target_label: "Article"  
+      
+    - type: "GUIDES"
+      source_label: "Article"
+      target_label: "Article"
+
+    # ===================================
+    # QUẢN LÝ PHIÊN BẢN
+    - type: "AMENDS"           # SỬA ĐỔI
+      source_label: "Article"
+      target_label: "Article"
+      
+    - type: "SUPPLEMENTS"      # BỔ SUNG
+      source_label: "Article"
+      target_label: "Chapter"  
+      
+    - type: "ABROGATES"        # BÃI BỎ
+      source_label: "Article"
+      target_label: "Article"
+      
+    - type: "REPLACES"         # THAY THẾ TOÀN BỘ
+      source_label: "Document"
+      target_label: "Document"
