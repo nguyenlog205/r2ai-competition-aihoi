@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field
 from typing import List, Optional, Literal
 
 # ------------------------------------------------------------------------------
-# 1. NODE SCHEMAS (ENTITIES)
+# NODE SCHEMAS
 # ------------------------------------------------------------------------------
 
 class ChunkNode(BaseModel):
@@ -20,6 +20,7 @@ class ChunkNode(BaseModel):
     )
     chunk_index: str = Field(..., description="Index or symbol (e.g., '1', '2', 'a', 'b', or 'split_1')")
     text: str = Field(..., description="Original raw text content intended for Vector Embedding.")
+    embedding: Optional[List[float]] = None
 
 class ArticleNode(BaseModel):
     """Represents a complete legal Article (Điều)."""
@@ -50,7 +51,7 @@ class ChapterNode(BaseModel):
     )
 
 # ------------------------------------------------------------------------------
-# 2. RELATIONSHIP SCHEMAS (EDGES)
+# RELATIONSHIP SCHEMAS (EDGES)
 # ------------------------------------------------------------------------------
 
 class LegalRelationship(BaseModel):
@@ -66,7 +67,7 @@ class LegalRelationship(BaseModel):
     evidence_text: str = Field(..., description="Exact textual excerpt demonstrating this relationship.")
 
 # ------------------------------------------------------------------------------
-# 3. ROOT SCHEMA (DATA TRANSFER OBJECT)
+# ROOT SCHEMA (DATA TRANSFER OBJECT)
 # ------------------------------------------------------------------------------
 
 class LegalDocumentExtraction(BaseModel):
