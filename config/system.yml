@@ -1,0 +1,28 @@
+# ====================================================================================
+# ====================================================================================
+# FILE: config/system.yml
+# MANAGE CONNECTION AND DEVELOPMENT ENVIRONMENT
+# ====================================================================================
+# ====================================================================================
+
+environment: "development"
+
+# =====================================================
+# Database Configuration
+# =====================================================
+neo4j:
+  development:
+    uri: "bolt://localhost:7687"
+    user: "neo4j"
+    password: "your_local_password"
+    max_connection_pool_size: 50
+
+  production:
+    uri: "neo4j+s://your-aura-db-id.databases.neo4j.io"
+    user: "neo4j"
+    password: "your_production_password"
+    max_connection_pool_size: 100
+
+# ============================================================
+# Other configurations will be defined then there
+# ============================================================
