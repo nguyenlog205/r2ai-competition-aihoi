@@ -26,3 +26,12 @@ neo4j:
 # ============================================================
 # Other configurations will be defined then there
 # ============================================================
+embedding:
+  strategy: "mean" 
+  models:
+    - name: "keepitreal/vietnamese-sbert"
+      dimension: 768
+      enabled: true
+    - name: "vinai/phobert-base"
+      dimension: 768
+      enabled: false
