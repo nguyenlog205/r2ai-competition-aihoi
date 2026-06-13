@@ -52,5 +52,5 @@ jobs:
     - name: Run Integration Tests (Neo4j)
       env:
         PYTHONPATH: ${{ github.workspace }}
-      run: |
-        pytest tests/pipeline/test_graph_db.py -v
+        NEO4J_ENV: development
+      run: pytest tests/pipeline/test_graph_db.py -v
