@@ -1,0 +1,9 @@
+crawl:
+  search_keywords:
+    - "luật doanh nghiệp"
+    - "luật lao động"
+    - "sửa đổi luật doanh nghiệp"
+    - "sửa đổi luật lao động"
+  output_dir: "data/legal_document"
+  limit_page: 300
+  webpage_link: "https://vbpl.vn/pages/portal.aspx"
