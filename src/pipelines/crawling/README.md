@@ -1,11 +1,7 @@
-
-
-# A. Data ingestion and pre-processing
-
-## A.1. Data crawling
+## DOCUMENTATION | DATA CRAWLING
 > *This module ingests legal documents from the Vietnamese legal database vbpl.vn. It automates search, filtering, metadata extraction, and content harvesting for downstream processing.*
 
-### A.1.1. Features
+### 1. Features
 (a). Keyword‑based search – queries the portal for user‑defined terms (e.g., "luật đất đai").
 
 (b). Automatic filtering – only keeps documents that:
@@ -22,7 +18,7 @@
 
 (f). Headless mode – can run without a visible browser window for server environments.
 
-### A.1.2. Setup via YAML-file and usage
+### 2. Setup via YAML-file and usage
 To run, first create a YAML configuration file (example: config/data_preprocessing/crawl_config.yml):
 ```yml
 crawl:
@@ -61,8 +57,3 @@ Each JSON file is an array of objects with these fields:
 }
 ```
 > **Note**: The exact set of metadata fields depends on what the portal provides in the luoc‑do tab.
-## I.2. Data preprocessing and database loading
-
-
-# II. Retrievaling
-
