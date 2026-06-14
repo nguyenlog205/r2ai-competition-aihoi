@@ -87,7 +87,7 @@ def run_preprocessing():
         if not parsed:
             continue
 
-        target_doc_id = find_target_doc_id(parsed["target_doc_number"], parsed["target_doc_title"], doc_index)
+        target_doc_id = find_target_doc_id(parsed["target_doc_number"], parsed["target_doc_title"])
         target_chunk = None
         if target_doc_id:
             target_chunk = find_target_chunk(

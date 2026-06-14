@@ -1,27 +1,27 @@
 #!/usr/bin/env python3
 """
-Pipeline for chunking legal documents and building hierarchical indexes.
-Configuration: uses src.utils.config_loader (YAML + .env)
+Chunking pipeline: split legal documents into hierarchical chunks.
 """
 
-import json
 import re
+import json
 import hashlib
 from pathlib import Path
 from datetime import datetime
 from collections import defaultdict
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any
 
 from tqdm import tqdm
 
 from src.utils.config_loader import get_config
 from src.utils.log import get_logger
+from src.utils.text_processor import preprocess_text
 
 logger = get_logger("chunking_pipeline")
 
 
 # ----------------------------------------------------------------------
-# Chunking functions (from notebook)
+# Chunking functions
 # ----------------------------------------------------------------------
 def _split_by_sentences(doc, text, article_number, clause_number, article_title, max_chunk_size):
     sentences = re.split(r'(?<=\.)\s+(?=[A-ZÀ-ÁÂÃÈ-ÉÊÌ-ÍÒ-ÓÔÕÙ-ÚÝĐ])', text)
@@ -33,7 +33,7 @@ def _split_by_sentences(doc, text, article_number, clause_number, article_title,
         else:
             if current:
                 chunk = doc.copy()
-                chunk["chunk_content"] = current.strip()
+                chunk["chunk_content"] = preprocess_text(current.strip())
                 chunk["level"] = "sentence"
                 chunk["article_number"] = article_number
                 chunk["article_title"] = article_title
@@ -43,7 +43,7 @@ def _split_by_sentences(doc, text, article_number, clause_number, article_title,
             current = sent + " "
     if current:
         chunk = doc.copy()
-        chunk["chunk_content"] = current.strip()
+        chunk["chunk_content"] = preprocess_text(current.strip())
         chunk["level"] = "sentence"
         chunk["article_number"] = article_number
         chunk["article_title"] = article_title
@@ -52,11 +52,11 @@ def _split_by_sentences(doc, text, article_number, clause_number, article_title,
         chunks.append(chunk)
     return chunks
 
-
 def _chunk_by_paragraphs(doc, text, max_chunk_size):
     paragraphs = [p.strip() for p in text.split('\n\n') if p.strip()]
     chunks = []
     for para in paragraphs:
+        para = preprocess_text(para)
         if len(para) <= max_chunk_size:
             chunk = doc.copy()
             chunk["chunk_content"] = para
@@ -71,22 +71,25 @@ def _chunk_by_paragraphs(doc, text, max_chunk_size):
                 else:
                     if current:
                         chunk = doc.copy()
-                        chunk["chunk_content"] = current.strip()
+                        chunk["chunk_content"] = preprocess_text(current.strip())
                         chunk["level"] = "sentence"
                         chunks.append(chunk)
                     current = sent + " "
             if current:
                 chunk = doc.copy()
-                chunk["chunk_content"] = current.strip()
+                chunk["chunk_content"] = preprocess_text(current.strip())
                 chunk["level"] = "sentence"
                 chunks.append(chunk)
     return chunks
-
 
 def chunk_legal_document(doc: Dict[str, Any], max_chunk_size: int = 2000) -> List[Dict[str, Any]]:
     text = doc.get("nội dung", "")
     if not text:
         return []
+
+    # Preprocess full text for chunking (optional, but can help regex matching)
+    # We don't preprocess the original doc content because we want to keep original for reference.
+    # Instead, we'll preprocess each chunk content later.
 
     article_pattern = re.compile(r'^Điều\s+(\d+|[IVXLCDM]+)\s*[\.\:]?\s*(.*)$', re.MULTILINE | re.IGNORECASE)
     article_matches = list(article_pattern.finditer(text))
@@ -109,7 +112,7 @@ def chunk_legal_document(doc: Dict[str, Any], max_chunk_size: int = 2000) -> Lis
 
         if not clause_matches:
             chunk = doc.copy()
-            chunk["chunk_content"] = article_text
+            chunk["chunk_content"] = preprocess_text(article_text)
             chunk["level"] = "article"
             chunk["article_number"] = article_number
             chunk["article_title"] = article_title
@@ -123,6 +126,8 @@ def chunk_legal_document(doc: Dict[str, Any], max_chunk_size: int = 2000) -> Lis
                 clause_text = article_text[cl_start:cl_end].strip()
                 clause_number = cl_match.group(1)
                 clause_title = cl_match.group(2).strip() or None
+
+                clause_text = preprocess_text(clause_text)
 
                 if len(clause_text) <= max_chunk_size:
                     chunk = doc.copy()
@@ -144,7 +149,7 @@ def chunk_legal_document(doc: Dict[str, Any], max_chunk_size: int = 2000) -> Lis
 
 
 # ----------------------------------------------------------------------
-# Indexing functions (from indexing notebook)
+# Indexing functions
 # ----------------------------------------------------------------------
 def get_doc_id(doc_metadata: Dict[str, Any]) -> str:
     url = doc_metadata.get("url", "")
@@ -154,7 +159,6 @@ def get_doc_id(doc_metadata: Dict[str, Any]) -> str:
         unique = f"{doc_metadata.get('Tên văn bản', '')}_{doc_metadata.get('Số hiệu', '')}"
     return hashlib.md5(unique.encode("utf-8")).hexdigest()[:16]
 
-
 def get_chunk_id(doc_id: str, chunk: Dict[str, Any]) -> str:
     level = chunk.get("level", "unknown")
     article = chunk.get("article_number", "") or "0"
@@ -162,6 +166,7 @@ def get_chunk_id(doc_id: str, chunk: Dict[str, Any]) -> str:
     point = chunk.get("point", "") or "0"
     return f"{doc_id}__{level}__art{article}__cl{clause}__pt{point}"
 
+from collections import defaultdict
 
 def build_indexes(chunks: List[Dict[str, Any]]) -> tuple:
     doc_index = {}
@@ -177,7 +182,7 @@ def build_indexes(chunks: List[Dict[str, Any]]) -> tuple:
                                      "point", "start_char", "end_char", "subpart"]}
         doc_id = get_doc_id(doc_metadata)
 
-        # Document index (upsert)
+        # Document index
         doc_index[doc_id] = {
             "doc_id": doc_id,
             "url": doc_metadata.get("url"),
@@ -199,11 +204,10 @@ def build_indexes(chunks: List[Dict[str, Any]]) -> tuple:
         clause = str(chunk.get("clause_number") or "0")
         point = str(chunk.get("point") or "0")
 
-        # Append chunk_id to the appropriate point list (will create all intermediate dicts automatically)
+        # Append chunk_id to the appropriate point list
         hierarchy[doc_id][art][clause][point].append(chunk_id)
 
     return doc_index, chunk_index, hierarchy
-
 
 def save_indexes(doc_index, chunk_index, hierarchy, output_dir: Path):
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -226,7 +230,6 @@ def save_indexes(doc_index, chunk_index, hierarchy, output_dir: Path):
     logger.info(f"Saved chunk index: {len(chunk_index)} chunks")
     logger.info("Saved hierarchy tree")
 
-
 def clean_stale_documents(current_doc_ids, output_dir: Path):
     doc_path = output_dir / "document_index.json"
     chunk_path = output_dir / "chunk_index.json"
@@ -245,22 +248,20 @@ def clean_stale_documents(current_doc_ids, output_dir: Path):
     with open(chunk_path, "w", encoding="utf-8") as f:
         json.dump(new_chunk_index, f, ensure_ascii=False, indent=2)
 
-    removed = len(old_doc_index) - len(new_doc_index)
-    logger.info(f"Removed {removed} stale documents")
+    logger.info(f"Removed {len(old_doc_index)-len(new_doc_index)} stale documents")
 
 
 # ----------------------------------------------------------------------
-# Main pipeline
+# Main orchestration (optional)
 # ----------------------------------------------------------------------
 def run_chunking_pipeline():
-    """Load config, chunk documents, build indexes, and save all outputs."""
     config = get_config()
     chunk_cfg = config.get("chunking", {})
 
-    input_file = Path(chunk_cfg.get("input_file", "../../data/legal_document/metadata_law_ALL_FILTERED.json"))
-    output_dir = Path(chunk_cfg.get("output_dir", "../../data/legal_document"))
+    input_file = Path(chunk_cfg.get("input_file", "data/legal_document/metadata_law_ALL_FILTERED.json"))
+    output_dir = Path(chunk_cfg.get("output_dir", "data/legal_document"))
     max_chunk_size = chunk_cfg.get("max_chunk_size", 2000)
-    index_dir = Path(chunk_cfg.get("index_dir", "../../data/index"))
+    index_dir = Path(chunk_cfg.get("index_dir", "data/index"))
     clean_stale = chunk_cfg.get("clean_stale", False)
 
     logger.info(f"Loading documents from {input_file}")
@@ -268,34 +269,26 @@ def run_chunking_pipeline():
         documents = json.load(f)
     logger.info(f"Loaded {len(documents)} documents")
 
-    # Chunk all documents
     all_chunks = []
     for doc in tqdm(documents, desc="Chunking documents"):
         chunks = chunk_legal_document(doc, max_chunk_size=max_chunk_size)
         all_chunks.extend(chunks)
     logger.info(f"Total chunks created: {len(all_chunks)}")
 
-    # Save raw chunks
     output_dir.mkdir(parents=True, exist_ok=True)
     chunks_path = output_dir / "all_chunks.json"
     with open(chunks_path, "w", encoding="utf-8") as f:
         json.dump(all_chunks, f, ensure_ascii=False, indent=2)
-    logger.info(f"Saved {len(all_chunks)} chunks to {chunks_path}")
+    logger.info(f"Saved raw chunks to {chunks_path}")
 
-    # Build indexes
-    logger.info("Building document, chunk, and hierarchy indexes")
     doc_index, chunk_index, hierarchy = build_indexes(all_chunks)
-
-    # Save indexes
     save_indexes(doc_index, chunk_index, hierarchy, index_dir)
 
-    # Optionally clean stale documents
     if clean_stale:
         current_ids = set(doc_index.keys())
         clean_stale_documents(current_ids, index_dir)
 
     logger.info("Chunking pipeline finished successfully")
-
 
 if __name__ == "__main__":
     run_chunking_pipeline()

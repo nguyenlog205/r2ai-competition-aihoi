@@ -109,19 +109,26 @@ def parse_amendment_clause(chunk: Dict[str, Any], parent_doc_meta: Dict[str, Any
     }
 
 
-def find_target_doc_id(target_number: Optional[str], target_title: Optional[str]) -> Optional[str]:
-    """Find doc_id of the target document by number or title."""
+def find_target_doc_id(target_number: Optional[str], target_title: Optional[str],
+                       doc_index: Optional[Dict] = None) -> Optional[str]:
+    """Find doc_id of the target document by number or title.
+    Optionally use a provided doc_index; otherwise use global DOC_INDEX."""
+    if doc_index is None:
+        doc_index = DOC_INDEX
     if target_number:
-        for doc_id, meta in DOC_INDEX.items():
+        for doc_id, meta in doc_index.items():
             if meta.get("number") == target_number:
                 return doc_id
     if target_title:
         target_title_clean = target_title.strip()
-        for doc_id, meta in DOC_INDEX.items():
+        for doc_id, meta in doc_index.items():
             title = meta.get("title", "")
             if target_title_clean.lower() in title.lower():
                 return doc_id
     return None
+
+
+
 
 
 def extract_point_content(clause_text: str, point_label: str) -> Optional[str]:
@@ -147,10 +154,18 @@ def extract_point_content(clause_text: str, point_label: str) -> Optional[str]:
     return None
 
 
-def find_target_chunk(target_doc_id: str, article: Optional[str], clause: Optional[str], point: Optional[str]) -> Optional[Dict[str, Any]]:
-    """Find the target chunk. If point is specified but no dedicated chunk, extract from clause."""
-    doc_hierarchy = HIERARCHY.get(target_doc_id, {})
-    if not doc_hierarchy:
+def find_target_chunk(target_doc_id: str, article: Optional[str], clause: Optional[str], point: Optional[str],
+                      doc_hierarchy: Optional[Dict] = None, chunk_index: Optional[Dict] = None) -> Optional[Dict[str, Any]]:
+    """
+    Find the target chunk. If point is specified but no dedicated chunk, extract from clause.
+    Optionally use provided hierarchy and chunk_index; otherwise use global HIERARCHY and CHUNK_INDEX.
+    """
+    if doc_hierarchy is None:
+        doc_hierarchy = HIERARCHY
+    if chunk_index is None:
+        chunk_index = CHUNK_INDEX
+    doc_hier = doc_hierarchy.get(target_doc_id, {})
+    if not doc_hier:
         return None
 
     art_key = article if article else "0"
@@ -158,15 +173,15 @@ def find_target_chunk(target_doc_id: str, article: Optional[str], clause: Option
     point_key = point if point else "0"
 
     # 1. Exact match
-    chunk_ids = doc_hierarchy.get(art_key, {}).get(clause_key, {}).get(point_key, [])
+    chunk_ids = doc_hier.get(art_key, {}).get(clause_key, {}).get(point_key, [])
     if chunk_ids:
-        return CHUNK_INDEX.get(chunk_ids[0])
+        return chunk_index.get(chunk_ids[0])
 
     # 2. If point is specified, try to extract from the clause chunk
     if point_key != "0" and clause_key != "0":
-        clause_chunk_ids = doc_hierarchy.get(art_key, {}).get(clause_key, {}).get("0", [])
+        clause_chunk_ids = doc_hier.get(art_key, {}).get(clause_key, {}).get("0", [])
         if clause_chunk_ids:
-            clause_chunk = CHUNK_INDEX.get(clause_chunk_ids[0])
+            clause_chunk = chunk_index.get(clause_chunk_ids[0])
             if clause_chunk:
                 point_content = extract_point_content(clause_chunk["chunk_content"], point_key)
                 if point_content:
@@ -177,7 +192,6 @@ def find_target_chunk(target_doc_id: str, article: Optional[str], clause: Option
                     virtual_chunk["chunk_id"] = f"{target_doc_id}__virtual_point__art{art_key}__cl{clause_key}__pt{point_key}"
                     return virtual_chunk
                 else:
-                    # Fallback: return the whole clause chunk
                     virtual_chunk = clause_chunk.copy()
                     virtual_chunk["level"] = "clause_fallback"
                     virtual_chunk["note"] = f"Point {point_key} not found; showing whole clause instead."
@@ -185,12 +199,12 @@ def find_target_chunk(target_doc_id: str, article: Optional[str], clause: Option
 
     # 3. Fallback to article-level or clause-level chunk
     if clause_key != "0":
-        chunk_ids = doc_hierarchy.get(art_key, {}).get(clause_key, {}).get("0", [])
+        chunk_ids = doc_hier.get(art_key, {}).get(clause_key, {}).get("0", [])
         if chunk_ids:
-            return CHUNK_INDEX.get(chunk_ids[0])
-    chunk_ids = doc_hierarchy.get(art_key, {}).get("0", {}).get("0", [])
+            return chunk_index.get(chunk_ids[0])
+    chunk_ids = doc_hier.get(art_key, {}).get("0", {}).get("0", [])
     if chunk_ids:
-        return CHUNK_INDEX.get(chunk_ids[0])
+        return chunk_index.get(chunk_ids[0])
     return None
 
 
