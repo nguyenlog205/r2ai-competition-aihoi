@@ -10,28 +10,45 @@ environment: "development"
 # =====================================================
 # Database Configuration
 # =====================================================
-neo4j:
+postgresql:
   development:
-    uri: "bolt://localhost:7687"
-    user: "neo4j"
-    password: "your_local_password"
-    max_connection_pool_size: 50
-
+    host: localhost
+    port: 5432
+    database: legal_db
+    user: nguyenlog205
+    password: nguyenlog205
   production:
-    uri: "neo4j+s://your-aura-db-id.databases.neo4j.io"
-    user: "neo4j"
-    password: "your_production_password"
-    max_connection_pool_size: 100
+    host: your-prod-host
+    port: 5432
+    database: legal_db_prod
+    user: prod_user
+    password: prod_password
 
 # ============================================================
 # Other configurations will be defined then there
 # ============================================================
 embedding:
-  strategy: "mean" 
+  strategy: "single"   # or "mean" – but only one model is active
   models:
     - name: "keepitreal/vietnamese-sbert"
       dimension: 768
       enabled: true
+      column: "emb_keepitreal"
     - name: "vinai/phobert-base"
       dimension: 768
-      enabled: false
+      enabled: false   # <-- disable the problematic model
+    # có thể thêm model khác với dimension khác, nhưng khi đó strategy "mean" sẽ không dùng được
+
+reranker:
+  enabled: false
+  model: "AITeamVN/Vietnamese_Reranker"   # or "thanhtantran/Vietnamese_Reranker"
+  max_length: 2304                        # model's maximum token limit
+
+
+preprocessing:
+  input_file: "data/legal_document/metadata_law_ALL_FILTERED.json"
+  output_dir: "data/legal_document"
+  index_dir: "data/index"
+  max_chunk_size: 2000
+  clean_stale: false
+  amendment_relations_file: "data/index/amendment_relations.json"

@@ -6567,3 +6567,159 @@ Stacktrace:
 2026-06-13 18:24:45 | INFO     | crawler | Loaded 13 records from /home/nguyenlog205/projects/university/semester65/r2ai-aihoi/src/data/legal_document/metadata_law_sửa_đổi_luật_lao_động.json
 2026-06-13 18:24:45 | INFO     | crawler | Total before deduplication: 187
 2026-06-13 18:24:45 | INFO     | crawler | Saved 161 unique documents to /home/nguyenlog205/projects/university/semester65/r2ai-aihoi/src/data/legal_document/metadata_law_ALL.json
+2026-06-14 15:33:35 | INFO     | chunking_pipeline | Loading documents from ../../data/legal_document/metadata_law_ALL_FILTERED.json
+2026-06-14 15:33:57 | INFO     | chunking_pipeline | Loading documents from data/legal_document/metadata_law_ALL_FILTERED.json
+2026-06-14 15:33:57 | INFO     | chunking_pipeline | Loaded 12 documents
+2026-06-14 15:33:57 | INFO     | chunking_pipeline | Total chunks created: 3315
+2026-06-14 15:34:02 | INFO     | chunking_pipeline | Saved 3315 chunks to data/legal_document/all_chunks.json
+2026-06-14 15:34:02 | INFO     | chunking_pipeline | Building document, chunk, and hierarchy indexes
+2026-06-14 15:36:36 | INFO     | chunking_pipeline | Loading documents from data/legal_document/metadata_law_ALL_FILTERED.json
+2026-06-14 15:36:37 | INFO     | chunking_pipeline | Loaded 12 documents
+2026-06-14 15:36:37 | INFO     | chunking_pipeline | Total chunks created: 3315
+2026-06-14 15:36:42 | INFO     | chunking_pipeline | Saved 3315 chunks to data/legal_document/all_chunks.json
+2026-06-14 15:36:42 | INFO     | chunking_pipeline | Building document, chunk, and hierarchy indexes
+2026-06-14 15:36:48 | INFO     | chunking_pipeline | Saved document index: 12 documents
+2026-06-14 15:36:48 | INFO     | chunking_pipeline | Saved chunk index: 3260 chunks
+2026-06-14 15:36:48 | INFO     | chunking_pipeline | Saved hierarchy tree
+2026-06-14 15:36:48 | INFO     | chunking_pipeline | Chunking pipeline finished successfully
+2026-06-14 16:06:13 | INFO     | preprocessing_main | Loading documents from data/legal_document/metadata_law_ALL_FILTERED.json
+2026-06-14 16:06:13 | INFO     | preprocessing_main | Loaded 12 documents
+2026-06-14 16:06:13 | INFO     | preprocessing_main | Total chunks created: 3315
+2026-06-14 16:06:18 | INFO     | preprocessing_main | Saved raw chunks to data/legal_document/all_chunks.json
+2026-06-14 16:06:18 | INFO     | preprocessing_main | Building document, chunk, and hierarchy indexes
+2026-06-14 16:06:24 | INFO     | chunking_pipeline | Saved document index: 12 documents
+2026-06-14 16:06:24 | INFO     | chunking_pipeline | Saved chunk index: 3260 chunks
+2026-06-14 16:06:24 | INFO     | chunking_pipeline | Saved hierarchy tree
+2026-06-14 16:06:24 | INFO     | preprocessing_main | Detecting amendment relationships
+2026-06-14 16:09:26 | INFO     | preprocessing_main | Loading documents from data/legal_document/metadata_law_ALL_FILTERED.json
+2026-06-14 16:09:26 | INFO     | preprocessing_main | Loaded 12 documents
+2026-06-14 16:09:26 | INFO     | preprocessing_main | Total chunks created: 3315
+2026-06-14 16:09:31 | INFO     | preprocessing_main | Saved raw chunks to data/legal_document/all_chunks.json
+2026-06-14 16:09:31 | INFO     | preprocessing_main | Building document, chunk, and hierarchy indexes
+2026-06-14 16:09:37 | INFO     | chunking_pipeline | Saved document index: 12 documents
+2026-06-14 16:09:37 | INFO     | chunking_pipeline | Saved chunk index: 3260 chunks
+2026-06-14 16:09:37 | INFO     | chunking_pipeline | Saved hierarchy tree
+2026-06-14 16:09:37 | INFO     | preprocessing_main | Detecting amendment relationships
+2026-06-14 16:11:56 | INFO     | preprocessing_main | Loading documents from data/legal_document/metadata_law_ALL_FILTERED.json
+2026-06-14 16:11:56 | INFO     | preprocessing_main | Loaded 12 documents
+2026-06-14 16:11:56 | INFO     | preprocessing_main | Total chunks created: 3315
+2026-06-14 16:12:01 | INFO     | preprocessing_main | Saved raw chunks to data/legal_document/all_chunks.json
+2026-06-14 16:12:01 | INFO     | preprocessing_main | Building document, chunk, and hierarchy indexes
+2026-06-14 16:12:07 | INFO     | chunking_pipeline | Saved document index: 12 documents
+2026-06-14 16:12:07 | INFO     | chunking_pipeline | Saved chunk index: 3260 chunks
+2026-06-14 16:12:07 | INFO     | chunking_pipeline | Saved hierarchy tree
+2026-06-14 16:12:07 | INFO     | preprocessing_main | Detecting amendment relationships
+2026-06-14 16:12:07 | INFO     | preprocessing_main | Found 64 amendment relations
+2026-06-14 16:12:07 | INFO     | preprocessing_main | Saved amendment relations to data/index/amendment_relations.json
+2026-06-14 16:12:07 | INFO     | preprocessing_main | Preprocessing pipeline finished successfully.
+2026-06-14 16:56:04 | INFO     | load_to_postgres | Loading 12 documents...
+2026-06-14 16:56:04 | INFO     | load_to_postgres | Documents loaded.
+2026-06-14 16:56:08 | INFO     | load_to_postgres | Loading 3260 chunks...
+2026-06-14 16:56:08 | INFO     | load_to_postgres | Chunks loaded.
+2026-06-14 16:56:08 | INFO     | load_to_postgres | Loading 3315 hierarchy entries...
+2026-06-14 16:56:09 | INFO     | load_to_postgres | Hierarchy loaded.
+2026-06-14 16:56:09 | INFO     | load_to_postgres | Loading 64 amendment relations...
+2026-06-14 16:56:09 | INFO     | load_to_postgres | Amendments loaded.
+2026-06-14 17:09:59 | INFO     | create_schema | Base tables created.
+2026-06-14 17:09:59 | INFO     | create_schema | Added column emb_keepitreal (dim=768) to chunks table.
+2026-06-14 17:09:59 | INFO     | create_schema | Added column emb_phobert (dim=768) to chunks table.
+2026-06-14 17:09:59 | INFO     | create_schema | Added column embedding_combined for mean aggregation.
+2026-06-14 17:09:59 | INFO     | create_schema | Schema creation completed.
+2026-06-14 17:10:21 | INFO     | load_to_postgres | Loading 12 documents...
+2026-06-14 17:10:21 | INFO     | load_to_postgres | Documents loaded.
+2026-06-14 17:10:25 | INFO     | load_to_postgres | Loading 3260 chunks...
+2026-06-14 17:10:25 | INFO     | load_to_postgres | Chunks loaded.
+2026-06-14 17:10:25 | INFO     | load_to_postgres | Loading 3315 hierarchy entries...
+2026-06-14 17:10:26 | INFO     | load_to_postgres | Hierarchy loaded.
+2026-06-14 17:10:26 | INFO     | load_to_postgres | Loading 64 amendment relations...
+2026-06-14 17:10:26 | INFO     | load_to_postgres | Amendments loaded.
+2026-06-14 17:18:28 | INFO     | chunking_pipeline | Loading documents from data/legal_document/metadata_law_ALL_FILTERED.json
+2026-06-14 17:18:28 | INFO     | chunking_pipeline | Loaded 12 documents
+2026-06-14 17:18:28 | INFO     | chunking_pipeline | Total chunks created: 3315
+2026-06-14 17:18:34 | INFO     | chunking_pipeline | Saved raw chunks to data/legal_document/all_chunks.json
+2026-06-14 17:18:46 | INFO     | preprocessing_main | Loading documents from data/legal_document/metadata_law_ALL_FILTERED.json
+2026-06-14 17:18:46 | INFO     | preprocessing_main | Loaded 12 documents
+2026-06-14 17:18:46 | INFO     | preprocessing_main | Total chunks created: 3315
+2026-06-14 17:18:52 | INFO     | preprocessing_main | Saved raw chunks to data/legal_document/all_chunks.json
+2026-06-14 17:18:52 | INFO     | preprocessing_main | Building document, chunk, and hierarchy indexes
+2026-06-14 17:20:05 | INFO     | preprocessing_main | Loading documents from data/legal_document/metadata_law_ALL_FILTERED.json
+2026-06-14 17:20:05 | INFO     | preprocessing_main | Loaded 12 documents
+2026-06-14 17:20:05 | INFO     | preprocessing_main | Total chunks created: 3315
+2026-06-14 17:20:11 | INFO     | preprocessing_main | Saved raw chunks to data/legal_document/all_chunks.json
+2026-06-14 17:20:11 | INFO     | preprocessing_main | Building document, chunk, and hierarchy indexes
+2026-06-14 17:20:17 | INFO     | chunking_pipeline | Saved document index: 12 documents
+2026-06-14 17:20:17 | INFO     | chunking_pipeline | Saved chunk index: 3260 chunks
+2026-06-14 17:20:17 | INFO     | chunking_pipeline | Saved hierarchy tree
+2026-06-14 17:20:17 | INFO     | preprocessing_main | Detecting amendment relationships
+2026-06-14 17:20:17 | INFO     | preprocessing_main | Found 64 amendment relations
+2026-06-14 17:20:17 | INFO     | preprocessing_main | Saved amendment relations to data/index/amendment_relations.json
+2026-06-14 17:20:17 | INFO     | preprocessing_main | Preprocessing pipeline finished successfully.
+2026-06-14 17:21:38 | INFO     | load_to_postgres | Loading 12 documents...
+2026-06-14 17:21:38 | INFO     | load_to_postgres | Documents loaded.
+2026-06-14 17:21:42 | INFO     | load_to_postgres | Loading 3260 chunks...
+2026-06-14 17:21:43 | INFO     | load_to_postgres | Chunks loaded.
+2026-06-14 17:21:43 | INFO     | load_to_postgres | Loading 3315 hierarchy entries...
+2026-06-14 17:21:43 | INFO     | load_to_postgres | Hierarchy loaded.
+2026-06-14 17:21:43 | INFO     | load_to_postgres | Loading 64 amendment relations...
+2026-06-14 17:21:43 | INFO     | load_to_postgres | Amendments loaded.
+2026-06-14 17:21:43 | INFO     | load_to_postgres | Database loading completed.
+2026-06-14 17:21:55 | INFO     | load_to_postgres | Loading 12 documents...
+2026-06-14 17:21:55 | INFO     | load_to_postgres | Documents loaded.
+2026-06-14 17:21:59 | INFO     | load_to_postgres | Loading 3260 chunks...
+2026-06-14 17:21:59 | INFO     | load_to_postgres | Chunks loaded.
+2026-06-14 17:21:59 | INFO     | load_to_postgres | Loading 3315 hierarchy entries...
+2026-06-14 17:21:59 | INFO     | load_to_postgres | Hierarchy loaded.
+2026-06-14 17:21:59 | INFO     | load_to_postgres | Loading 64 amendment relations...
+2026-06-14 17:21:59 | INFO     | load_to_postgres | Amendments loaded.
+2026-06-14 17:21:59 | INFO     | load_to_postgres | Database loading completed.
+2026-06-14 17:23:06 | INFO     | compute_embeddings | Processing model: keepitreal/vietnamese-sbert -> column emb_keepitreal
+2026-06-14 17:23:17 | INFO     | compute_embeddings | Processing model: keepitreal/vietnamese-sbert -> column emb_keepitreal
+2026-06-14 17:23:25 | INFO     | compute_embeddings | Need to embed 3260 chunks for emb_keepitreal
+2026-06-14 17:23:59 | INFO     | compute_embeddings | Completed embeddings for keepitreal/vietnamese-sbert
+2026-06-14 17:23:59 | INFO     | compute_embeddings | Processing model: vinai/phobert-base -> column emb_phobert
+2026-06-14 17:24:04 | INFO     | compute_embeddings | Need to embed 3260 chunks for emb_phobert
+2026-06-14 17:25:57 | INFO     | compute_embeddings | Processing model: keepitreal/vietnamese-sbert -> column emb_keepitreal
+2026-06-14 17:26:07 | INFO     | compute_embeddings | Need to embed 3260 chunks for emb_keepitreal
+2026-06-14 17:26:40 | INFO     | compute_embeddings | Completed embeddings for keepitreal/vietnamese-sbert
+2026-06-14 17:26:40 | INFO     | compute_embeddings | Embedding computation finished.
+2026-06-14 17:30:19 | INFO     | retriever | Retriever initialized with model keepitreal/vietnamese-sbert, column emb_keepitreal
+2026-06-14 17:53:59 | INFO     | retriever | Retriever initialized with model keepitreal/vietnamese-sbert, column emb_keepitreal, rerank=False
+2026-06-14 17:59:47 | INFO     | reranker | Reranker initialized with AITeamVN/Vietnamese_Reranker (max_length=2304)
+2026-06-14 17:59:47 | INFO     | retriever | Retriever initialized with model keepitreal/vietnamese-sbert, column emb_keepitreal, rerank=True
+2026-06-14 18:00:02 | INFO     | retriever | Retriever initialized with model keepitreal/vietnamese-sbert, column emb_keepitreal, rerank=False
+2026-06-14 19:15:27 | INFO     | retrieve_candidates | Loaded 2000 test questions.
+2026-06-14 19:15:42 | INFO     | reranker | Reranker initialized with AITeamVN/Vietnamese_Reranker (max_length=2304)
+2026-06-14 19:15:42 | INFO     | retriever | Retriever initialized with model keepitreal/vietnamese-sbert, column emb_keepitreal, rerank=True
+2026-06-14 19:24:04 | INFO     | retrieve_candidates | Loaded 2000 test questions.
+2026-06-14 19:26:18 | INFO     | retrieve_candidates | Loaded 2000 test questions.
+2026-06-14 19:26:27 | INFO     | retriever | Retriever initialized with model keepitreal/vietnamese-sbert, column emb_keepitreal, rerank=False
+2026-06-14 19:27:16 | INFO     | retrieve_candidates | Saved retrieved chunks to data/test/retrieved_chunks.json
+2026-06-14 22:24:52 | INFO     | preprocessing_main | Loading documents from data/legal_document/metadata_law_ALL_FILTERED.json
+2026-06-14 22:24:52 | INFO     | preprocessing_main | Loaded 55 documents
+2026-06-14 22:24:52 | INFO     | preprocessing_main | Total chunks created: 8132
+2026-06-14 22:25:02 | INFO     | preprocessing_main | Saved raw chunks to data/legal_document/all_chunks.json
+2026-06-14 22:25:02 | INFO     | preprocessing_main | Building document, chunk, and hierarchy indexes
+2026-06-14 22:25:11 | INFO     | chunking_pipeline | Saved document index: 55 documents
+2026-06-14 22:25:11 | INFO     | chunking_pipeline | Saved chunk index: 7606 chunks
+2026-06-14 22:25:11 | INFO     | chunking_pipeline | Saved hierarchy tree
+2026-06-14 22:25:11 | INFO     | preprocessing_main | Detecting amendment relationships
+2026-06-14 22:25:11 | INFO     | preprocessing_main | Found 112 amendment relations
+2026-06-14 22:25:11 | INFO     | preprocessing_main | Saved amendment relations to data/index/amendment_relations.json
+2026-06-14 22:25:11 | INFO     | preprocessing_main | Preprocessing pipeline finished successfully.
+2026-06-14 22:25:23 | INFO     | load_to_postgres | Loading 55 documents...
+2026-06-14 22:25:23 | INFO     | load_to_postgres | Documents loaded.
+2026-06-14 22:25:30 | INFO     | load_to_postgres | Loading 7606 chunks...
+2026-06-14 22:25:30 | INFO     | load_to_postgres | Chunks loaded.
+2026-06-14 22:25:30 | INFO     | load_to_postgres | Loading 8132 hierarchy entries...
+2026-06-14 22:25:31 | INFO     | load_to_postgres | Hierarchy loaded.
+2026-06-14 22:25:31 | INFO     | load_to_postgres | Loading 112 amendment relations...
+2026-06-14 22:25:31 | INFO     | load_to_postgres | Amendments loaded.
+2026-06-14 22:25:31 | INFO     | load_to_postgres | Database loading completed.
+2026-06-14 22:25:36 | INFO     | compute_embeddings | Processing model: keepitreal/vietnamese-sbert -> column emb_keepitreal
+2026-06-14 22:25:50 | INFO     | compute_embeddings | Need to embed 7606 chunks for emb_keepitreal
+2026-06-14 22:27:11 | INFO     | compute_embeddings | Completed embeddings for keepitreal/vietnamese-sbert
+2026-06-14 22:27:11 | INFO     | compute_embeddings | Embedding computation finished.
+2026-06-14 22:31:08 | INFO     | retrieve_candidates | Loaded 2000 test questions.
+2026-06-14 22:31:27 | INFO     | retrieve_candidates | Loaded 2000 test questions.
+2026-06-14 22:31:46 | INFO     | reranker | Reranker initialized with AITeamVN/Vietnamese_Reranker (max_length=2304)
+2026-06-14 22:31:46 | INFO     | retriever | Retriever initialized with model keepitreal/vietnamese-sbert, column emb_keepitreal, rerank=True
